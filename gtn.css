@@ -1,0 +1,48 @@
+html {
+  box-sizing: border-box;
+  padding: 1rem;
+  font: 16px/1.5 "DejaVu Sans", Verdana, sans-serif;
+}
+
+body {
+  max-width: 25rem;
+  margin: 0 auto;
+}
+
+h1, footer {
+  margin: 0;
+  font-weight: normal;
+  line-height: 1;
+  color: #999;
+}
+
+h1 {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+}
+
+#main {
+  padding: 1rem;
+  border: 1px solid #999;
+  border-radius: 4px;
+}
+
+#face {
+  float: left;
+}
+
+#main::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+footer {
+  font-size: .75rem;
+  text-transform: lowercase;
+}
+
+footer a {
+  text-decoration: none;
+  color: #666;
+}

@@ -1,111 +1,128 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="200"
-   height="200"
-   viewBox="0 0 200 200"
-   id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="face.svg">
-  <defs
-     id="defs4" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="223.25"
-     inkscape:cy="100"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     units="px"
-     inkscape:snap-object-midpoints="true"
-     inkscape:object-nodes="true"
-     inkscape:snap-smooth-nodes="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1056"
-     inkscape:window-x="0"
-     inkscape:window-y="24"
-     inkscape:window-maximized="0">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3336"
-       spacingx="10"
-       spacingy="10" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata7">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(0,-852.36216)">
-    <ellipse
-       style="opacity:1;fill:#edd400;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="face"
-       cx="100"
-       cy="952.36218"
-       rx="80"
-       ry="80.000023"
-       inkscape:label="#path3338" />
-    <circle
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="iris-left"
-       cx="70"
-       cy="932.36218"
-       r="20"
-       inkscape:label="#path4140" />
-    <circle
-       r="20"
-       cy="932.36218"
-       cx="130"
-       id="iris-right"
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       inkscape:label="#circle4142" />
-    <circle
-       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="pupil-left"
-       cx="70"
-       cy="932.36218"
-       r="10"
-       inkscape:label="#path4144" />
-    <ellipse
-       cy="932.36218"
-       cx="130"
-       id="pupil-right"
-       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       inkscape:label="#circle4146"
-       rx="10"
-       ry="10.000023" />
-    <path
-       style="fill:#ef2929;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 50,972.36216 c 0,10 20,30.00004 50,30.00004 30,0 50,-20.00008 50,-30.00008 z"
-       id="mouth"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cscc"
-       inkscape:label="#path4148" />
-  </g>
+   viewBox="0 0 200 200"
+   height="200"
+   width="200">
+  <style>
+    svg {
+      stroke: #000;
+      stroke-width: 5;
+      stroke-linejoin: round;
+    }
+    .face {
+      fill: #edd400;
+    }
+    .iris {
+      fill: #fff;
+    }
+    .pupil {
+      fill: #000;
+      stroke: none;
+    }
+    .mouth {
+      fill: #ef2929;
+      transition: transform 1s;
+    }
+  </style>
+  <ellipse
+     id="face"
+     class="face"
+     cx="100"
+     cy="100"
+     rx="80"
+     ry="80" />
+  <circle
+     id="iris-left"
+     class="iris"
+     cx="70"
+     cy="80"
+     r="20" />
+  <circle
+     id="iris-right"
+     class="iris"
+     cx="130"
+     cy="80"
+     r="20" />
+  <circle
+     id="pupil-left"
+     class="pupil"
+     cx="70"
+     cy="80"
+     r="10" />
+  <circle
+     id="pupil-right"
+     class="pupil"
+     cx="130"
+     cy="80"
+     r="10" />
+  <path
+     id="mouth"
+     class="mouth"
+     style="transform-origin: 100px 120px"
+     vector-effect="non-scaling-stroke"
+     d="m 50,120 c 0,10 20,30 50,30 30,0 50,-20 50,-30 z" />
+  <script>
+    'use strict'
+    var MouthAnimator = {
+      // Iterations per second.
+      nomsPerSecond: 2,
+      // Current mouth size. Ranges from 0 to 1 inclusive.
+      scaleY: 1,
+      // When false, the animation will stop before its next iteration.
+      keepGoing: false,
+      // True when the mouth is expanding, false when it is contracting.
+      isOpening: false,
+      // Time of previous frame in milliseconds. This is null if and only if
+      // the animation is not running.
+      lastFrame: null,
+      // Add the specified delta to scaleY.
+      // Returns true when we need to change direction.
+      updateScaleY(delta) {
+        this.scaleY += delta
+        this.scaleY = Math.max(0, Math.min(1, this.scaleY))
+        document.getElementById('mouth').setAttribute('transform', `scale(1, ${this.scaleY})`)
+        return this.scaleY == 0 || this.scaleY == 1
+      },
+      // Step the animation, given the current time in milliseconds.
+      tick(time) {
+        var progress = time - (this.lastFrame || time)
+        var delta = progress / 1000 * 2 * this.nomsPerSecond
+        if (this.isOpening) {
+          // Widen the mouth
+          if (this.updateScaleY(delta)) {
+            this.isOpening = false
+            // Only stop animating when the mouth is open
+            if (!this.keepGoing) {
+              this.lastFrame = null
+              return
+            }
+          }
+        } else {
+          // Narrow the mouth
+          if (this.updateScaleY(-delta)) {
+            this.isOpening = true
+          }
+        }
+        this.lastFrame = time
+        window.requestAnimationFrame(this.tick.bind(this))
+      },
+      // Start the animation, if it's not running already.
+      start() {
+        if (!this.lastFrame) {
+          this.keepGoing = true
+          window.requestAnimationFrame(this.tick.bind(this))
+        }
+      },
+      // Stop the animation before the next cycle.
+      stop() {
+        this.keepGoing = false
+      },
+      // Set the rate of mouth movement.
+      setNomsPerSecond(value) {
+        this.nomsPerSecond = value
+      },
+    }
+  </script>
 </svg>
