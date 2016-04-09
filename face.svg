@@ -65,7 +65,7 @@
      d="m 50,120 c 0,10 20,30 50,30 30,0 50,-20 50,-30 z" />
   <script>
     'use strict'
-    var MouthAnimator = {
+    var mouthAnimator = {
       // Iterations per second.
       nomsPerSecond: 2,
       // Current mouth size. Ranges from 0 to 1 inclusive.
