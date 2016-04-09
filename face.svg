@@ -110,8 +110,8 @@
       },
       // Start the animation, if it's not running already.
       start() {
+        this.keepGoing = true
         if (!this.lastFrame) {
-          this.keepGoing = true
           window.requestAnimationFrame(this.tick.bind(this))
         }
       },
