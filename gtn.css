@@ -3,6 +3,16 @@ html {
   padding: 1rem;
   font: 16px/1.5 "DejaVu Sans", Verdana, sans-serif;
 }
+@media (min-width: 750px) and (min-height: 450px) {
+  html {
+    font-size: 24px;
+  }
+}
+@media (min-width: 1000px) and (min-height: 600px) {
+  html {
+    font-size: 32px;
+  }
+}
 
 body {
   max-width: 30rem;
@@ -29,6 +39,15 @@ h1 {
 
 #face {
   float: left;
+  width: 12rem;
+  height: 12rem;
+}
+@media (max-width: 500px) {
+  #face {
+    float: none;
+    display: block;
+    margin: 0 auto;
+  }
 }
 
 #dialog {
@@ -38,6 +57,13 @@ h1 {
   border: 3px solid #acf;
   border-radius: 4px;
   background: #eff;
+}
+@media (max-width: 500px) {
+  #dialog {
+    float: none;
+    width: auto;
+    text-align: center;
+  }
 }
 
 #main::after {
