@@ -26,21 +26,21 @@ class GuessTheNumber {
 class MouthAnimator {
   constructor(mouth) {
     this.mouth = mouth
-    this.keepGoing = false
+    this.semaphore = 0
     this.mouth.addEventListener('animationiteration', () => {
-      if (!this.keepGoing) this.mouth.classList.remove('mouth-moving')
+      if (this.semaphore <= 0) this.mouth.classList.remove('mouth-moving')
     })
   }
 
   // Start the animation, if it's not running already.
   start() {
-    this.keepGoing = true
-    this.mouth.classList.add('mouth-moving')
+    ++this.semaphore
+    if (this.semaphore > 0) this.mouth.classList.add('mouth-moving')
   }
 
   // Stop the animation before the next cycle.
   stop() {
-    this.keepGoing = false
+    --this.semaphore
   }
 }
 
