@@ -30,20 +30,34 @@ class GuessTheNumber {
     }
     if (args.onInput) {
       var callback = () => {
-        args.onInput.call(this, this.dialogText.value)
+        var guess = parseInt(this.inputText.value, 10)
+        if (isNaN(guess) || guess < 1 || guess > 100) return
+        args.onInput.call(this, guess)
         this.inputOk.removeEventListener('click', callback)
       }
+      this.inputText.value = ''
+      this.inputText.focus()
       this.inputOk.addEventListener('click', callback)
     }
   }
 
-  speak(text, animationLength) {
+  say(text) {
     return new Promise(resolve => {
       this.transition({
         state: 'dialog',
         text: text,
-        animationLength: animationLength,
+        animationLength: 50 * text.length,
         onDialog: resolve,
+      })
+    })
+  }
+
+  ask(question) {
+    return new Promise(resolve => {
+      this.transition({
+        state: 'input',
+        text: question,
+        onInput: resolve,
       })
     })
   }
@@ -80,14 +94,18 @@ window.addEventListener('load', () => {
   var inputText = document.getElementById('input-text')
   var dialogOk = document.getElementById('dialog-ok')
   var inputOk = document.getElementById('input-ok')
-  var gtn = new GuessTheNumber(root, mouthAnimator, dialogText, inputText, dialogOk, inputOk)
-  window.gtn = gtn
-  testFunction()
+  var g = new GuessTheNumber(root, mouthAnimator, dialogText, inputText, dialogOk, inputOk)
+  window.g = g
+  startGame(g)
 })
 
 
-function testFunction() {
-  return window.gtn.speak("Welcome to the Number Guessing Game!", 2000).then(() =>
-    window.gtn.speak("Let's go shopping!", 2000)).then(() =>
-    testFunction())
+function startGame(g) {
+  return g.say(`Welcome to the Number Guessing Game!`)
+    .then(() => g.say(`I'm thinking of a number from 1 through 100.`))
+    .then(() => g.ask(`What is your guess?`))
+    .then(guess =>
+      guess === 42 ?
+        g.say(`Correct!`) :
+        g.say(`Completely and utterly wrong!`))
 }
