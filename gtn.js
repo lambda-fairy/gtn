@@ -1,6 +1,5 @@
 'use strict'
 
-var SVG = 'http://www.w3.org/2000/svg'
 
 class GuessTheNumber {
   constructor(mouthAnimator, dialog) {
@@ -23,13 +22,38 @@ class GuessTheNumber {
   }
 }
 
+
+class MouthAnimator {
+  constructor(mouth) {
+    this.mouth = mouth
+    this.keepGoing = false
+    this.mouth.addEventListener('animationiteration', () => {
+      if (!this.keepGoing) this.mouth.classList.remove('mouth-moving')
+    })
+  }
+
+  // Start the animation, if it's not running already.
+  start() {
+    this.keepGoing = true
+    this.mouth.classList.add('mouth-moving')
+  }
+
+  // Stop the animation before the next cycle.
+  stop() {
+    this.keepGoing = false
+  }
+}
+
+
 window.addEventListener('load', () => {
-  var mouthAnimator = document.getElementById('face').contentWindow.mouthAnimator
+  var mouth = document.getElementById('face').contentDocument.getElementById('mouth')
+  var mouthAnimator = new MouthAnimator(mouth)
   var dialog = document.getElementById('dialog')
   var gtn = new GuessTheNumber(mouthAnimator, dialog)
   window.gtn = gtn
   testFunction()
 })
+
 
 function testFunction() {
   return window.gtn.speak("Math is hard!", 2000).then(() =>

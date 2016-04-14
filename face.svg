@@ -23,7 +23,18 @@
     }
     .mouth {
       fill: #ef2929;
-      transition: transform 1s;
+      transform-origin: 100px 120px;
+      transform: scale(1, 0.2);
+    }
+    .mouth-moving {
+      animation-duration: 0.5s;
+      animation-name: mouth-nom;
+      animation-iteration-count: infinite;
+    }
+    @keyframes mouth-nom {
+      0% { transform: scale(1, 0.2); }
+      50% { transform: scale(1, 1); }
+      100% { transform: scale(1, 0.2); }
     }
   </style>
   <ellipse
@@ -60,69 +71,6 @@
   <path
      id="mouth"
      class="mouth"
-     style="transform-origin: 100px 120px"
      vector-effect="non-scaling-stroke"
      d="m 50,120 c 0,10 20,30 50,30 30,0 50,-20 50,-30 z" />
-  <script>
-    'use strict'
-    var mouthAnimator = {
-      // Iterations per second.
-      nomsPerSecond: 2,
-      // Current mouth size. Ranges from 0 to 1 inclusive.
-      scaleY: 1,
-      // When false, the animation will stop before its next iteration.
-      keepGoing: false,
-      // True when the mouth is expanding, false when it is contracting.
-      isOpening: false,
-      // Time of previous frame in milliseconds. This is null if and only if
-      // the animation is not running.
-      lastFrame: null,
-      // Add the specified delta to scaleY.
-      // Returns true when we need to change direction.
-      updateScaleY(delta) {
-        this.scaleY += delta
-        this.scaleY = Math.max(0, Math.min(1, this.scaleY))
-        document.getElementById('mouth').setAttribute('transform', `scale(1, ${this.scaleY})`)
-        return this.scaleY == 0 || this.scaleY == 1
-      },
-      // Step the animation, given the current time in milliseconds.
-      tick(time) {
-        var progress = time - (this.lastFrame || time)
-        var delta = progress / 1000 * 2 * this.nomsPerSecond
-        if (this.isOpening) {
-          // Widen the mouth
-          if (this.updateScaleY(delta)) {
-            this.isOpening = false
-            // Only stop animating when the mouth is open
-            if (!this.keepGoing) {
-              this.lastFrame = null
-              return
-            }
-          }
-        } else {
-          // Narrow the mouth
-          if (this.updateScaleY(-delta)) {
-            this.isOpening = true
-          }
-        }
-        this.lastFrame = time
-        window.requestAnimationFrame(this.tick.bind(this))
-      },
-      // Start the animation, if it's not running already.
-      start() {
-        this.keepGoing = true
-        if (!this.lastFrame) {
-          window.requestAnimationFrame(this.tick.bind(this))
-        }
-      },
-      // Stop the animation before the next cycle.
-      stop() {
-        this.keepGoing = false
-      },
-      // Set the rate of mouth movement.
-      setNomsPerSecond(value) {
-        this.nomsPerSecond = value
-      },
-    }
-  </script>
 </svg>
