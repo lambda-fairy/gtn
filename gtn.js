@@ -16,10 +16,10 @@ class GuessTheNumber {
       this.root.classList.remove(`state-${s}`)
     }
     this.root.classList.add(`state-${args.state}`)
-    this.dialogText.textContent = args.text || ''
-    if (args.animationLength) {
+    if (args.text) {
+      this.dialogText.textContent = args.text
       this.mouthAnimator.start()
-      setTimeout(() => this.mouthAnimator.stop(), args.animationLength)
+      setTimeout(() => this.mouthAnimator.stop(), 50 * args.text.length)
     }
     if (args.onDialog) {
       var callback = () => {
@@ -46,7 +46,6 @@ class GuessTheNumber {
       this.transition({
         state: 'dialog',
         text: text,
-        animationLength: 50 * text.length,
         onDialog: resolve,
       })
     })
