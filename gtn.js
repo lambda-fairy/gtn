@@ -2,13 +2,13 @@
 
 
 class GuessTheNumber {
-  constructor(root, mouthAnimator, dialogText, inputText, dialogOk, inputOk) {
+  constructor(root, mouthAnimator, dialogText, dialogOk, inputForm, inputText) {
     this.root = root
     this.mouthAnimator = mouthAnimator
     this.dialogText = dialogText
-    this.inputText = inputText
     this.dialogOk = dialogOk
-    this.inputOk = inputOk
+    this.inputForm = inputForm
+    this.inputText = inputText
   }
 
   transition(args) {
@@ -22,22 +22,24 @@ class GuessTheNumber {
       setTimeout(() => this.mouthAnimator.stop(), 50 * args.text.length)
     }
     if (args.onDialog) {
-      var callback = () => {
+      var handleDialog = () => {
         args.onDialog.call(this)
-        this.dialogOk.removeEventListener('click', callback)
+        this.dialogOk.removeEventListener('click', handleDialog)
       }
-      this.dialogOk.addEventListener('click', callback)
+      this.dialogOk.focus()
+      this.dialogOk.addEventListener('click', handleDialog)
     }
     if (args.onInput) {
-      var callback = () => {
+      var handleInput = (e) => {
+        e.preventDefault()
         var guess = parseInt(this.inputText.value, 10)
         if (isNaN(guess) || guess < 1 || guess > 100) return
         args.onInput.call(this, guess)
-        this.inputOk.removeEventListener('click', callback)
+        this.inputForm.removeEventListener('submit', handleInput)
       }
       this.inputText.value = ''
       this.inputText.focus()
-      this.inputOk.addEventListener('click', callback)
+      this.inputForm.addEventListener('submit', handleInput)
     }
   }
 
@@ -90,10 +92,10 @@ window.addEventListener('load', () => {
   var mouth = document.getElementById('face').contentDocument.getElementById('mouth')
   var mouthAnimator = new MouthAnimator(mouth)
   var dialogText = document.getElementById('dialog-text')
-  var inputText = document.getElementById('input-text')
   var dialogOk = document.getElementById('dialog-ok')
-  var inputOk = document.getElementById('input-ok')
-  var g = new GuessTheNumber(root, mouthAnimator, dialogText, inputText, dialogOk, inputOk)
+  var inputForm = document.getElementById('input')
+  var inputText = document.getElementById('input-text')
+  var g = new GuessTheNumber(root, mouthAnimator, dialogText, dialogOk,  inputForm, inputText)
   window.g = g
   startGame(g)
 })
