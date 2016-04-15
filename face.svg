@@ -8,14 +8,15 @@
   <style>
     svg {
       stroke: #000;
-      stroke-width: 5;
       stroke-linejoin: round;
     }
     .face {
       fill: #edd400;
+      stroke-width: 5;
     }
     .iris {
       fill: #fff;
+      stroke-width: 3;
     }
     .pupil {
       fill: #000;
@@ -23,6 +24,7 @@
     }
     .mouth {
       fill: #ef2929;
+      stroke-width: 5;
       transform-origin: 100px 120px;
       transform: scale(1, 0.2);
     }
