@@ -110,19 +110,49 @@ function startGame(g) {
 
 function loop(g, low, high, chances) {
   if (chances) {
+    // Obfuscate the logging a bit
+    console.log(((chances << 24) | (high << 16) | low).toString(36))
     return g.ask(`What is your guess?`)
       .then(guess => {
-        var middle = Math.floor((low + high) / 2)
-        if (guess <= middle) {
-          return g.say(`Too low!`)
-            .then(() => loop(g, Math.max(low, guess + 1), high, chances - 1))
-        } else {
-          return g.say(`Too high!`)
-            .then(() => loop(g, low, Math.min(high, guess - 1), chances - 1))
+        // We can either respond "too high" or "too low".
+        // But we don't want to put ourselves in a tight spot.
+        // For example, if the user guesses 99 on their first turn, we don't
+        // want to say "too low"; because then they'll win on the next turn.
+        // So we first do some arithmetic to determine which of the two choices
+        // are safe.
+        var options = []
+        if (guessesNeeded(low, guess - 1) >= chances - 1) options.push('toohigh')
+        if (guessesNeeded(guess + 1, high) >= chances - 1) options.push('toolow')
+        switch (randomChoice(options)) {
+          case 'toohigh':
+            return g.say(`Too high!`)
+              .then(() => loop(g, low, Math.min(high, guess - 1), chances - 1))
+          case 'toolow':
+            return g.say(`Too low!`)
+              .then(() => loop(g, Math.max(low, guess + 1), high, chances - 1))
         }
       })
   } else {
     var actual = Math.floor((high - low + 1) * Math.random() + low)
     return g.say(`The number was actually... ${actual}!`)
   }
+}
+
+
+// Calculate the minimum number of bisections needed to reduce [low, high] down
+// to a single element.
+//
+// Returns -1 when high < low.
+function guessesNeeded(low, high) {
+  if (high < low) return -1
+  var range = high - low + 1
+  for (var i = 0; range > 1; ++i) range = Math.floor((range - 1) / 2)
+  return i
+}
+
+
+// Pick a random element from an array.
+function randomChoice(items) {
+  var i = Math.floor(items.length * Math.random())
+  return items[i]
 }
