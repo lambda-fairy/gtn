@@ -6,25 +6,17 @@
    height="200"
    width="200">
   <style>
-    svg {
-      stroke: #000;
-      stroke-linejoin: round;
-    }
     .face {
       fill: #edd400;
-      stroke-width: 5;
     }
     .iris {
       fill: #fff;
-      stroke-width: 3;
     }
     .pupil {
       fill: #000;
-      stroke: none;
     }
     .mouth {
       fill: #ef2929;
-      stroke-width: 5;
       transform-origin: 100px 120px;
       transform: scale(1, 0.2);
     }
@@ -73,6 +65,5 @@
   <path
      id="mouth"
      class="mouth"
-     vector-effect="non-scaling-stroke"
      d="m 50,120 c 0,10 20,30 50,30 30,0 50,-20 50,-30 z" />
 </svg>
