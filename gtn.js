@@ -104,9 +104,25 @@ window.addEventListener('load', () => {
 function startGame(g) {
   return g.say(`Welcome to the Number Guessing Game!`)
     .then(() => g.say(`I'm thinking of a number from 1 through 100.`))
-    .then(() => g.ask(`What is your guess?`))
-    .then(guess =>
-      guess === 42 ?
-        g.say(`Correct!`) :
-        g.say(`Completely and utterly wrong!`))
+    .then(() => loop(g, 1, 100, 5))
+}
+
+
+function loop(g, low, high, chances) {
+  if (chances) {
+    return g.ask(`What is your guess?`)
+      .then(guess => {
+        var middle = Math.floor((low + high) / 2)
+        if (guess <= middle) {
+          return g.say(`Too low!`)
+            .then(() => loop(g, Math.max(low, guess + 1), high, chances - 1))
+        } else {
+          return g.say(`Too high!`)
+            .then(() => loop(g, low, Math.min(high, guess - 1), chances - 1))
+        }
+      })
+  } else {
+    var actual = Math.floor((high - low + 1) * Math.random() + low)
+    return g.say(`The number was actually... ${actual}!`)
+  }
 }
