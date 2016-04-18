@@ -53,9 +53,10 @@ h1 {
 }
 
 .block {
+  box-sizing: border-box;
   float: right;
-  width: 12rem;
-  padding: 0.75rem;
+  width: 14rem;
+  padding: 1rem;
 }
 @media (max-width: 500px) {
   .block {
@@ -108,10 +109,9 @@ h1 {
   float: right;
 }
 
-#play-again-button {
-  width: 100%;
-  padding: 0.25rem;
-  border: 2px solid orange;
+#play-again {
+  border: 2px solid #fb0;
+  border-radius: 4px;
   background: #fc0;
 }
 

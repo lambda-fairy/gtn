@@ -2,14 +2,13 @@
 
 
 class GuessTheNumber {
-  constructor(root, mouthAnimator, dialogText, dialogOk, inputForm, inputText, playAgainForm, playAgainButton) {
+  constructor(root, mouthAnimator, dialogText, dialogOk, inputForm, inputText, playAgainButton) {
     this.root = root
     this.mouthAnimator = mouthAnimator
     this.dialogText = dialogText
     this.dialogOk = dialogOk
     this.inputForm = inputForm
     this.inputText = inputText
-    this.playAgainForm = playAgainForm
     this.playAgainButton = playAgainButton
   }
 
@@ -54,15 +53,14 @@ class GuessTheNumber {
   gameOver(taunt) {
     return new Promise(resolve => {
       this.startDialog(taunt)
-      this.playAgainForm.style.display = 'block'
+      this.playAgainButton.style.display = 'block'
       this.playAgainButton.focus()
       var handlePlayAgain = e => {
-        e.preventDefault()
-        this.playAgainForm.style.display = 'none'
-        this.playAgainForm.removeEventListener('submit', handlePlayAgain)
+        this.playAgainButton.style.display = 'none'
+        this.playAgainButton.removeEventListener('click', handlePlayAgain)
         resolve()
       }
-      this.playAgainForm.addEventListener('submit', handlePlayAgain)
+      this.playAgainButton.addEventListener('click', handlePlayAgain)
     })
   }
 }
@@ -98,9 +96,8 @@ window.addEventListener('load', () => {
   var dialogOk = document.getElementById('dialog-ok')
   var inputForm = document.getElementById('input')
   var inputText = document.getElementById('input-text')
-  var playAgainForm = document.getElementById('play-again')
-  var playAgainButton = document.getElementById('play-again-button')
-  var g = new GuessTheNumber(root, mouthAnimator, dialogText, dialogOk, inputForm, inputText, playAgainForm, playAgainButton)
+  var playAgainButton = document.getElementById('play-again')
+  var g = new GuessTheNumber(root, mouthAnimator, dialogText, dialogOk, inputForm, inputText, playAgainButton)
   window.g = g
   intro(g)
 })
