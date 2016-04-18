@@ -11,55 +11,41 @@ class GuessTheNumber {
     this.inputText = inputText
   }
 
-  transition(args) {
-    for (var s of ['dialog', 'input', 'gameover']) {
-      this.root.classList.remove(`state-${s}`)
-    }
-    this.root.classList.add(`state-${args.state}`)
-    if (args.text) {
-      this.dialogText.textContent = args.text
-      this.mouthAnimator.start()
-      setTimeout(() => this.mouthAnimator.stop(), 50 * args.text.length)
-    }
-    if (args.onDialog) {
-      var handleDialog = () => {
-        args.onDialog.call(this)
-        this.dialogOk.removeEventListener('click', handleDialog)
-      }
-      this.dialogOk.focus()
-      this.dialogOk.addEventListener('click', handleDialog)
-    }
-    if (args.onInput) {
-      var handleInput = (e) => {
-        e.preventDefault()
-        var guess = parseInt(this.inputText.value, 10)
-        if (isNaN(guess) || guess < 1 || guess > 100) return
-        args.onInput.call(this, guess)
-        this.inputForm.removeEventListener('submit', handleInput)
-      }
-      this.inputText.value = ''
-      this.inputText.focus()
-      this.inputForm.addEventListener('submit', handleInput)
-    }
+  startDialog(text) {
+    this.dialogText.textContent = text
+    this.mouthAnimator.start()
+    setTimeout(() => this.mouthAnimator.stop(), 50 * text.length)
   }
 
   say(text) {
     return new Promise(resolve => {
-      this.transition({
-        state: 'dialog',
-        text: text,
-        onDialog: resolve,
-      })
+      this.startDialog(text)
+      this.dialogOk.style.display = 'block'
+      this.dialogOk.focus()
+      var handleDialog = () => {
+        this.dialogOk.style.display = 'none'
+        this.dialogOk.removeEventListener('click', handleDialog)
+        resolve()
+      }
+      this.dialogOk.addEventListener('click', handleDialog)
     })
   }
 
   ask(question) {
     return new Promise(resolve => {
-      this.transition({
-        state: 'input',
-        text: question,
-        onInput: resolve,
-      })
+      this.startDialog(question)
+      this.inputForm.style.display = 'block'
+      this.inputText.value = ''
+      this.inputText.focus()
+      var handleInput = e => {
+        e.preventDefault()
+        var guess = parseInt(this.inputText.value, 10)
+        if (isNaN(guess) || guess < 1 || guess > 100) return
+        this.inputForm.style.display = 'none'
+        this.inputForm.removeEventListener('submit', handleInput)
+        resolve(guess)
+      }
+      this.inputForm.addEventListener('submit', handleInput)
     })
   }
 }

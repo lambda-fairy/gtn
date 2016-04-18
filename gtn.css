@@ -36,9 +36,6 @@ h1 {
   border-radius: 4px;
 }
 
-.state-dialog #input, .state-gameover #input { visibility: hidden }
-.state-input #dialog-ok { display: none }
-
 #face {
   float: left;
   width: 12rem;
