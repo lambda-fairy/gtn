@@ -108,6 +108,13 @@ h1 {
   float: right;
 }
 
+#play-again-button {
+  width: 100%;
+  padding: 0.25rem;
+  border: 2px solid orange;
+  background: #fc0;
+}
+
 #dialog::after, #input::after, #main::after {
   content: "";
   display: table;

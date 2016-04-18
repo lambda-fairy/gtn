@@ -2,13 +2,15 @@
 
 
 class GuessTheNumber {
-  constructor(root, mouthAnimator, dialogText, dialogOk, inputForm, inputText) {
+  constructor(root, mouthAnimator, dialogText, dialogOk, inputForm, inputText, playAgainForm, playAgainButton) {
     this.root = root
     this.mouthAnimator = mouthAnimator
     this.dialogText = dialogText
     this.dialogOk = dialogOk
     this.inputForm = inputForm
     this.inputText = inputText
+    this.playAgainForm = playAgainForm
+    this.playAgainButton = playAgainButton
   }
 
   startDialog(text) {
@@ -48,6 +50,21 @@ class GuessTheNumber {
       this.inputForm.addEventListener('submit', handleInput)
     })
   }
+
+  gameOver(taunt) {
+    return new Promise(resolve => {
+      this.startDialog(taunt)
+      this.playAgainForm.style.display = 'block'
+      this.playAgainButton.focus()
+      var handlePlayAgain = e => {
+        e.preventDefault()
+        this.playAgainForm.style.display = 'none'
+        this.playAgainForm.removeEventListener('submit', handlePlayAgain)
+        resolve()
+      }
+      this.playAgainForm.addEventListener('submit', handlePlayAgain)
+    })
+  }
 }
 
 
@@ -81,16 +98,23 @@ window.addEventListener('load', () => {
   var dialogOk = document.getElementById('dialog-ok')
   var inputForm = document.getElementById('input')
   var inputText = document.getElementById('input-text')
-  var g = new GuessTheNumber(root, mouthAnimator, dialogText, dialogOk,  inputForm, inputText)
+  var playAgainForm = document.getElementById('play-again')
+  var playAgainButton = document.getElementById('play-again-button')
+  var g = new GuessTheNumber(root, mouthAnimator, dialogText, dialogOk, inputForm, inputText, playAgainForm, playAgainButton)
   window.g = g
-  startGame(g)
+  intro(g)
 })
 
 
-function startGame(g) {
+function intro(g) {
   return g.say(`Welcome to the Number Guessing Game!`)
     .then(() => g.say(`I'm thinking of a number from 1 through 100.`))
-    .then(() => loop(g, 1, 100, 5))
+    .then(() => start(g))
+}
+
+
+function start(g) {
+  loop(g, 1, 100, 5)
 }
 
 
@@ -121,6 +145,8 @@ function loop(g, low, high, chances) {
   } else {
     var actual = Math.floor((high - low + 1) * Math.random() + low)
     return g.say(`The number was actually... ${actual}!`)
+      .then(() => g.gameOver(`Would you like to play again?`))
+      .then(() => start(g))
   }
 }
 
