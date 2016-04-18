@@ -1,5 +1,5 @@
 html, input, button {
-  font: 16px/1.5 "DejaVu Sans", Verdana, sans-serif;
+  font: 16px/1.5 Helvetica, Arial, sans-serif;
 }
 @media (min-width: 750px) and (min-height: 450px) {
   html, input, button {
