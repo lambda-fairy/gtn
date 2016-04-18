@@ -1,16 +1,19 @@
-html {
-  padding: 1rem;
+html, input, button {
   font: 16px/1.5 "DejaVu Sans", Verdana, sans-serif;
 }
 @media (min-width: 750px) and (min-height: 450px) {
-  html {
+  html, input, button {
     font-size: 24px;
   }
 }
 @media (min-width: 1000px) and (min-height: 600px) {
-  html {
+  html, input, button {
     font-size: 32px;
   }
+}
+
+html {
+  padding: 1rem;
 }
 
 body {
@@ -52,7 +55,7 @@ h1 {
 .block {
   float: right;
   width: 12rem;
-  padding: 1rem;
+  padding: 0.75rem;
 }
 @media (max-width: 500px) {
   .block {
@@ -63,9 +66,6 @@ h1 {
 }
 
 .ok {
-  width: 2rem;
-  font-size: 2rem;
-  line-height: 1rem;
   background: none;
   border: none;
 }
@@ -91,11 +91,6 @@ h1 {
 
 #input {
   padding: 0 1rem;
-}
-
-input, button {
-  font-size: 1rem;
-  min-height: 2rem;
 }
 
 #input-text::-webkit-outer-spin-button,
