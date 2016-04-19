@@ -2,20 +2,32 @@
 
 
 class GuessTheNumber {
-  constructor(root, mouthAnimator, dialogText, dialogOk, inputForm, inputText, playAgainButton) {
+  constructor(root, mouthAnimator, chancesContainer, chancesText, dialogText, dialogOk, inputForm, inputText, playAgainButton) {
     this.root = root
     this.mouthAnimator = mouthAnimator
+    this.chancesContainer = chancesContainer
+    this.chancesText = chancesText
     this.dialogText = dialogText
     this.dialogOk = dialogOk
     this.inputForm = inputForm
     this.inputText = inputText
     this.playAgainButton = playAgainButton
+    this.setChances(null)
   }
 
   startDialog(text) {
     this.dialogText.textContent = text
     this.mouthAnimator.start()
     setTimeout(() => this.mouthAnimator.stop(), 50 * text.length)
+  }
+
+  setChances(chances) {
+    if (chances === null) {
+      this.chancesContainer.style.display = 'none'
+    } else {
+      this.chancesContainer.style.display = 'block'
+      this.chancesText.textContent = chances
+    }
   }
 
   say(text) {
@@ -92,12 +104,14 @@ window.addEventListener('load', () => {
   var root = document.getElementById('main')
   var mouth = document.getElementById('face').contentDocument.getElementById('mouth')
   var mouthAnimator = new MouthAnimator(mouth)
+  var chancesContainer = document.getElementById('chances')
+  var chancesText = document.getElementById('chances-text')
   var dialogText = document.getElementById('dialog-text')
   var dialogOk = document.getElementById('dialog-ok')
   var inputForm = document.getElementById('input')
   var inputText = document.getElementById('input-text')
   var playAgainButton = document.getElementById('play-again')
-  var g = new GuessTheNumber(root, mouthAnimator, dialogText, dialogOk, inputForm, inputText, playAgainButton)
+  var g = new GuessTheNumber(root, mouthAnimator, chancesContainer, chancesText, dialogText, dialogOk, inputForm, inputText, playAgainButton)
   window.g = g
   intro(g)
 })
@@ -116,6 +130,7 @@ function start(g) {
 
 
 function loop(g, low, high, chances) {
+  g.setChances(chances)
   if (chances) {
     // Obfuscate the logging a bit
     console.log(((chances << 24) | (high << 16) | low).toString(36))
