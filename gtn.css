@@ -132,7 +132,10 @@ button:focus {
 #play-again {
   border: 2px solid #fb0;
   border-radius: 4px;
-  background: #fc0;
+  background: linear-gradient(to bottom, #fc0, #fb0);
+}
+#play-again:active {
+  background: #fb0;
 }
 
 #dialog::after, #input::after, #main::after {
