@@ -33,6 +33,15 @@ h1 {
   text-transform: uppercase;
 }
 
+button::-moz-focus-inner {
+  /* Remove ugly dotted outlines on Gecko */
+  border: none;
+}
+button:focus {
+  /* Remove ugly blue outlines on WebKit */
+  outline: none;
+}
+
 #main {
   padding: 1rem;
   border: 1px solid #999;
