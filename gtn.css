@@ -13,12 +13,18 @@ html, input, button {
 }
 
 html {
-  padding: 1rem;
+  box-sizing: border-box;
+  min-height: 100%;
+}
+
+* {
+  box-sizing: inherit;
 }
 
 body {
   max-width: 30rem;
   margin: 0 auto;
+  padding: 1rem;
 }
 
 h1, footer {
@@ -43,9 +49,13 @@ button:focus {
 }
 
 #main {
-  padding: 1rem;
+  padding: 0.5rem;
   border: 1px solid #999;
   border-radius: 4px;
+}
+
+#main > * {
+  margin: 0.5rem;
 }
 
 #face {
@@ -61,25 +71,24 @@ button:focus {
   }
 }
 
-.block {
-  box-sizing: border-box;
+#antiface {
   float: right;
-  width: 14rem;
-  padding: 1rem;
+  width: calc(100% - 14rem);
 }
 @media (max-width: 500px) {
-  .block {
+  #antiface {
     float: none;
     width: auto;
-    text-align: center;
   }
 }
 
-#chances {
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-top: 0;
-  margin-bottom: 0;
+#antiface > * {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 1rem;
+  border: 3px solid transparent;
+  border-radius: 4px;
 }
 
 #chances-text {
@@ -93,9 +102,7 @@ button:focus {
 
 #dialog {
   position: relative;
-  min-height: 4.5rem;
-  border: 3px solid #cef;
-  border-radius: 4px;
+  border-color: #cef;
   background: #eff;
 }
 @media (max-width: 500px) {
@@ -105,13 +112,11 @@ button:focus {
 }
 
 #dialog-ok {
-  position: absolute;
-  bottom: 0.5rem;
-  right: 0.25rem;
+  float: right;
 }
 
-#input {
-  padding: 0 1rem;
+#input-form {
+  display: flex;
 }
 
 #input-text::-webkit-outer-spin-button,
@@ -121,24 +126,20 @@ button:focus {
 }
 #input-text {
   -moz-appearance: textfield;
-  width: calc(100% - 4rem);
-  float: left;
-}
-
-#input-ok {
-  float: right;
+  min-width: 0;
+  flex: 1;
 }
 
 #play-again {
-  border: 2px solid #fb0;
-  border-radius: 4px;
+  margin-top: 1rem;
+  border-color: #fb0;
   background: linear-gradient(to bottom, #fc0, #fb0);
 }
 #play-again:active {
   background: #fb0;
 }
 
-#dialog::after, #input::after, #main::after {
+#dialog::after, #main::after {
   content: "";
   display: table;
   clear: both;
