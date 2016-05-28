@@ -35,8 +35,18 @@ h1, footer {
 }
 
 h1 {
+  float: left;
   font-size: 1.5rem;
   text-transform: uppercase;
+}
+
+output {
+  font-weight: bold;
+}
+
+#losses {
+  float: right;
+  margin: 0 1rem;
 }
 
 button::-moz-focus-inner {
@@ -49,6 +59,7 @@ button:focus {
 }
 
 #main {
+  clear: both;
   padding: 0.5rem;
   border: 1px solid #999;
   border-radius: 4px;
@@ -89,10 +100,6 @@ button:focus {
   padding: 1rem;
   border: 3px solid transparent;
   border-radius: 4px;
-}
-
-#chances-text {
-  font-weight: bold;
 }
 
 .ok {

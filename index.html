@@ -11,11 +11,12 @@
 <meta name="viewport" content="width=device-width">
 
 <h1>Guess the Number!</h1>
+<p id="losses" style="display: none">Losses: <output id="losses-text">???</output></p>
 
 <div id="main">
   <object type="image/svg+xml" id="face" data="face.svg"></object>
   <div id="antiface">
-    <p id="chances">Guesses left: <span id="chances-text">???</span>
+    <p id="chances">Guesses left: <output id="chances-text">???</output>
     <p id="dialog">
       <span id="dialog-text"></span>
       <button id="dialog-ok" class="ok" style="display: none">▶</button>

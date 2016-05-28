@@ -2,17 +2,20 @@
 
 
 class GuessTheNumber {
-  constructor(root, mouthAnimator, chancesContainer, chancesText, dialogText, dialogOk, inputForm, inputText, playAgainButton) {
+  constructor(root, mouthAnimator, chancesContainer, chancesText, lossesContainer, lossesText, dialogText, dialogOk, inputForm, inputText, playAgainButton) {
     this.root = root
     this.mouthAnimator = mouthAnimator
     this.chancesContainer = chancesContainer
     this.chancesText = chancesText
+    this.lossesContainer = lossesContainer
+    this.lossesText = lossesText
     this.dialogText = dialogText
     this.dialogOk = dialogOk
     this.inputForm = inputForm
     this.inputText = inputText
     this.playAgainButton = playAgainButton
     this.setChances(null)
+    this.losses = 0
   }
 
   startDialog(text) {
@@ -28,6 +31,12 @@ class GuessTheNumber {
       this.chancesContainer.style.display = 'block'
       this.chancesText.textContent = chances
     }
+  }
+
+  recordLoss() {
+    ++this.losses
+    this.lossesContainer.style.display = 'block'
+    this.lossesText.textContent = this.losses
   }
 
   say(text) {
@@ -106,12 +115,14 @@ window.addEventListener('load', () => {
   var mouthAnimator = new MouthAnimator(mouth)
   var chancesContainer = document.getElementById('chances')
   var chancesText = document.getElementById('chances-text')
+  var lossesContainer = document.getElementById('losses')
+  var lossesText = document.getElementById('losses-text')
   var dialogText = document.getElementById('dialog-text')
   var dialogOk = document.getElementById('dialog-ok')
   var inputForm = document.getElementById('input')
   var inputText = document.getElementById('input-text')
   var playAgainButton = document.getElementById('play-again')
-  var g = new GuessTheNumber(root, mouthAnimator, chancesContainer, chancesText, dialogText, dialogOk, inputForm, inputText, playAgainButton)
+  var g = new GuessTheNumber(root, mouthAnimator, chancesContainer, chancesText, lossesContainer, lossesText, dialogText, dialogOk, inputForm, inputText, playAgainButton)
   window.g = g
   intro(g)
 })
@@ -156,6 +167,7 @@ function loop(g, low, high, chances) {
       })
   } else {
     var actual = Math.floor((high - low + 1) * Math.random() + low)
+    g.recordLoss()
     return g.say(`The number was actually... ${actual}!`)
       .then(() => g.gameOver(`Would you like to play again?`))
       .then(() => start(g))
