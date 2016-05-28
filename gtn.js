@@ -1,8 +1,121 @@
 'use strict'
 
 
+function findLocalStorage() {
+  for (var type of ['localStorage', 'sessionStorage']) {
+    try {
+      var storage = window[type]
+      var x = 'gtnStorageTest'
+      storage.setItem(x, x)
+      storage.removeItem(x)
+      return storage
+    } catch (e) {}
+  }
+  return null
+}
+
+
+class Journal {
+  constructor(storage) {
+    this.storage = storage || findLocalStorage()
+    this.rewind()
+  }
+
+  rewind() {
+    this.journal = []
+    this.index = 0
+    var data = null
+    try {
+      data = JSON.parse(this.storage.getItem('gtnJournal'))
+    } catch (e) {
+      console.error(`Error while loading game: ${e}`)
+    }
+    if (Array.isArray(data)) {
+      this.journal = data
+    } else {
+      console.log(`No save data found; starting new game`)
+    }
+  }
+
+  save() {
+    try {
+      this.storage.setItem('gtnJournal', JSON.stringify(this.journal))
+    } catch (e) {
+      console.error(`Error while saving game: ${e}`)
+    }
+  }
+
+  _read(label, args) {
+    // Try to replay an entry from the journal
+    var entry = this.journal[this.index]
+    if (entry) {
+      if (entry.label === label && JSON.stringify(entry.args) === JSON.stringify(args)) {
+        // Return the pre-computed result
+        ++this.index
+        return entry
+      } else {
+        // There's an entry here, but it doesn't match our game logic!
+        // Log the issue and keep going...
+        console.error(`Invalid log! Expected ${label}(${args}) but got ${entry.label}(${entry.args})`)
+        // Delete all entries after this one since we know they're wrong
+        this.journal.length = this.index
+      }
+    }
+    return null
+  }
+
+  _write(label, args, result) {
+    // Write an entry to the journal
+    this.journal[this.index] = { label: label, args: args, result: result }
+    ++this.index
+    this.save()
+  }
+
+  record(label, args, callback) {
+    var entry = this._read(label, args)
+    if (entry) {
+      return entry.result
+    } else {
+      var result = callback()
+      this._write(label, args, result)
+      return result
+    }
+  }
+
+  promise(label, args, callback) {
+    var entry = this._read(label, args)
+    if (entry) {
+      return Promise.resolve(entry.result)
+    } else {
+      return new Promise(callback).then(result => {
+        this._write(label, args, result)
+        return result
+      })
+    }
+  }
+}
+
+
+class Random {
+  constructor(journal) {
+    this.journal = journal
+  }
+
+  choice(items) {
+    return this.journal.record('choice', [items], () =>
+      items[Math.floor(items.length * Math.random())])
+  }
+
+  randint(low, high) {
+    return this.journal.record('randint', [low, high], () =>
+      Math.floor((high - low + 1) * Math.random() + low))
+  }
+}
+
+
 class GuessTheNumber {
-  constructor(root, mouthAnimator, chancesContainer, chancesText, lossesContainer, lossesText, dialogText, dialogOk, inputForm, inputText, playAgainButton) {
+  constructor(journal, root, mouthAnimator, chancesContainer, chancesText, lossesContainer, lossesText, dialogText, dialogOk, inputForm, inputText, playAgainButton) {
+    this.journal = journal
     this.root = root
     this.mouthAnimator = mouthAnimator
     this.chancesContainer = chancesContainer
@@ -16,6 +129,7 @@ class GuessTheNumber {
     this.playAgainButton = playAgainButton
     this.setChances(null)
     this.losses = 0
+    this.random = new Random(journal)
   }
 
   startDialog(text) {
@@ -40,7 +154,7 @@ class GuessTheNumber {
   }
 
   say(text) {
-    return new Promise(resolve => {
+    return this.journal.promise('say', [text], resolve => {
       this.startDialog(text)
       this.dialogOk.style.display = 'block'
       this.dialogOk.focus()
@@ -54,7 +168,7 @@ class GuessTheNumber {
   }
 
   ask(question) {
-    return new Promise(resolve => {
+    return this.journal.promise('ask', [question], resolve => {
       this.startDialog(question)
       this.inputForm.style.display = 'block'
       this.inputText.value = ''
@@ -72,7 +186,7 @@ class GuessTheNumber {
   }
 
   gameOver(taunt) {
-    return new Promise(resolve => {
+    return this.journal.promise('gameOver', [taunt], resolve => {
       this.startDialog(taunt)
       this.playAgainButton.style.display = 'block'
       this.playAgainButton.focus()
@@ -110,6 +224,7 @@ class MouthAnimator {
 
 
 window.addEventListener('load', () => {
+  var journal = new Journal()
   var root = document.getElementById('main')
   var mouth = document.getElementById('face').contentDocument.getElementById('mouth')
   var mouthAnimator = new MouthAnimator(mouth)
@@ -122,7 +237,7 @@ window.addEventListener('load', () => {
   var inputForm = document.getElementById('input')
   var inputText = document.getElementById('input-text')
   var playAgainButton = document.getElementById('play-again')
-  var g = new GuessTheNumber(root, mouthAnimator, chancesContainer, chancesText, lossesContainer, lossesText, dialogText, dialogOk, inputForm, inputText, playAgainButton)
+  var g = new GuessTheNumber(journal, root, mouthAnimator, chancesContainer, chancesText, lossesContainer, lossesText, dialogText, dialogOk, inputForm, inputText, playAgainButton)
   window.g = g
   intro(g)
 })
@@ -156,7 +271,7 @@ function loop(g, low, high, chances) {
         var options = []
         if (guessesNeeded(low, guess - 1) >= chances - 1) options.push('toohigh')
         if (guessesNeeded(guess + 1, high) >= chances - 1) options.push('toolow')
-        switch (randomChoice(options)) {
+        switch (g.random.choice(options)) {
           case 'toohigh':
             return g.say(`Too high!`)
               .then(() => loop(g, low, Math.min(high, guess - 1), chances - 1))
@@ -166,8 +281,8 @@ function loop(g, low, high, chances) {
         }
       })
   } else {
-    var actual = Math.floor((high - low + 1) * Math.random() + low)
     g.recordLoss()
+    var actual = g.random.randint(low, high)
     return g.say(`The number was actually... ${actual}!`)
       .then(() => g.gameOver(`Would you like to play again?`))
       .then(() => start(g))
@@ -184,11 +299,4 @@ function guessesNeeded(low, high) {
   var range = high - low + 1
   for (var i = 0; range > 1; ++i) range = Math.floor((range - 1) / 2)
   return i
-}
-
-
-// Pick a random element from an array.
-function randomChoice(items) {
-  var i = Math.floor(items.length * Math.random())
-  return items[i]
 }
