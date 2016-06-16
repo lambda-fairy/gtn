@@ -45,6 +45,16 @@ class Journal {
     }
   }
 
+  resetAndReload() {
+    try {
+      this.journal = []
+      this.storage.removeItem('gtnJournal')
+      location.reload()
+    } catch (e) {
+      console.error(`Error while resetting game: ${e}`)
+    }
+  }
+
   _read(label, args) {
     // Try to replay an entry from the journal
     var entry = this.journal[this.index]
@@ -57,8 +67,8 @@ class Journal {
         // There's an entry here, but it doesn't match our game logic!
         // Log the issue and keep going...
         console.error(`Invalid log! Expected ${label}(${args}) but got ${entry.label}(${entry.args})`)
-        // Delete all entries after this one since we know they're wrong
-        this.journal.length = this.index
+        // Delete all entries since we know they're wrong
+        this.resetAndReload()
       }
     }
     return null
