@@ -45,11 +45,10 @@ class Journal {
     }
   }
 
-  resetAndReload() {
+  reset() {
     try {
       this.journal = []
       this.storage.removeItem('gtnJournal')
-      location.reload()
     } catch (e) {
       console.error(`Error while resetting game: ${e}`)
     }
@@ -68,7 +67,8 @@ class Journal {
         // Log the issue and keep going...
         console.error(`Invalid log! Expected ${label}(${args}) but got ${entry.label}(${entry.args})`)
         // Delete all entries since we know they're wrong
-        this.resetAndReload()
+        this.reset()
+        location.reload()
       }
     }
     return null
