@@ -2,10 +2,10 @@
 
 
 function findLocalStorage() {
-  for (var type of ['localStorage', 'sessionStorage']) {
+  for (let type of ['localStorage', 'sessionStorage']) {
     try {
-      var storage = window[type]
-      var x = 'gtnStorageTest'
+      let storage = window[type]
+      let x = 'gtnStorageTest'
       storage.setItem(x, x)
       storage.removeItem(x)
       return storage
@@ -24,7 +24,7 @@ class Journal {
   rewind() {
     this.journal = []
     this.index = 0
-    var data = null
+    let data = null
     try {
       data = JSON.parse(this.storage.getItem('gtnJournal'))
     } catch (e) {
@@ -56,7 +56,7 @@ class Journal {
 
   _read(label, args) {
     // Try to replay an entry from the journal
-    var entry = this.journal[this.index]
+    let entry = this.journal[this.index]
     if (entry) {
       if (entry.label === label && JSON.stringify(entry.args) === JSON.stringify(args)) {
         // Return the pre-computed result
@@ -82,18 +82,18 @@ class Journal {
   }
 
   record(label, args, callback) {
-    var entry = this._read(label, args)
+    let entry = this._read(label, args)
     if (entry) {
       return entry.result
     } else {
-      var result = callback()
+      let result = callback()
       this._write(label, args, result)
       return result
     }
   }
 
   promise(label, args, callback) {
-    var entry = this._read(label, args)
+    let entry = this._read(label, args)
     if (entry) {
       return Promise.resolve(entry.result)
     } else {
@@ -168,7 +168,7 @@ class GuessTheNumber {
       this.startDialog(text)
       this.dialogOk.style.display = 'block'
       this.dialogOk.focus()
-      var handleDialog = () => {
+      let handleDialog = () => {
         this.dialogOk.style.display = 'none'
         this.dialogOk.removeEventListener('click', handleDialog)
         resolve()
@@ -183,9 +183,9 @@ class GuessTheNumber {
       this.inputForm.style.display = 'block'
       this.inputText.value = ''
       this.inputText.focus()
-      var handleInput = e => {
+      let handleInput = e => {
         e.preventDefault()
-        var guess = parseInt(this.inputText.value, 10)
+        let guess = parseInt(this.inputText.value, 10)
         if (isNaN(guess) || guess < 1 || guess > 100) return
         this.inputForm.style.display = 'none'
         this.inputForm.removeEventListener('submit', handleInput)
@@ -200,7 +200,7 @@ class GuessTheNumber {
       this.startDialog(taunt)
       this.playAgainButton.style.display = 'block'
       this.playAgainButton.focus()
-      var handlePlayAgain = e => {
+      let handlePlayAgain = e => {
         this.playAgainButton.style.display = 'none'
         this.playAgainButton.removeEventListener('click', handlePlayAgain)
         resolve()
@@ -234,20 +234,20 @@ class MouthAnimator {
 
 
 window.addEventListener('load', () => {
-  var journal = new Journal()
-  var root = document.getElementById('main')
-  var mouth = document.getElementById('face').contentDocument.getElementById('mouth')
-  var mouthAnimator = new MouthAnimator(mouth)
-  var chancesContainer = document.getElementById('chances')
-  var chancesText = document.getElementById('chances-text')
-  var lossesContainer = document.getElementById('losses')
-  var lossesText = document.getElementById('losses-text')
-  var dialogText = document.getElementById('dialog-text')
-  var dialogOk = document.getElementById('dialog-ok')
-  var inputForm = document.getElementById('input')
-  var inputText = document.getElementById('input-text')
-  var playAgainButton = document.getElementById('play-again')
-  var g = new GuessTheNumber(journal, root, mouthAnimator, chancesContainer, chancesText, lossesContainer, lossesText, dialogText, dialogOk, inputForm, inputText, playAgainButton)
+  let journal = new Journal()
+  let root = document.getElementById('main')
+  let mouth = document.getElementById('face').contentDocument.getElementById('mouth')
+  let mouthAnimator = new MouthAnimator(mouth)
+  let chancesContainer = document.getElementById('chances')
+  let chancesText = document.getElementById('chances-text')
+  let lossesContainer = document.getElementById('losses')
+  let lossesText = document.getElementById('losses-text')
+  let dialogText = document.getElementById('dialog-text')
+  let dialogOk = document.getElementById('dialog-ok')
+  let inputForm = document.getElementById('input')
+  let inputText = document.getElementById('input-text')
+  let playAgainButton = document.getElementById('play-again')
+  let g = new GuessTheNumber(journal, root, mouthAnimator, chancesContainer, chancesText, lossesContainer, lossesText, dialogText, dialogOk, inputForm, inputText, playAgainButton)
   window.g = g
   intro(g)
 })
@@ -278,7 +278,7 @@ function loop(g, low, high, chances) {
         // want to say "too low"; because then they'll win on the next turn.
         // So we first do some arithmetic to determine which of the two choices
         // are safe.
-        var options = []
+        let options = []
         if (guessesNeeded(low, guess - 1) >= chances - 1) options.push('toohigh')
         if (guessesNeeded(guess + 1, high) >= chances - 1) options.push('toolow')
         switch (g.random.choice(options)) {
@@ -292,7 +292,7 @@ function loop(g, low, high, chances) {
       })
   } else {
     g.recordLoss()
-    var actual = g.random.randint(low, high)
+    let actual = g.random.randint(low, high)
     return g.say(`The number was actually... ${actual}!`)
       .then(() => g.gameOver(`Would you like to play again?`))
       .then(() => start(g))
@@ -306,7 +306,7 @@ function loop(g, low, high, chances) {
 // Returns -1 when high < low.
 function guessesNeeded(low, high) {
   if (high < low) return -1
-  var range = high - low + 1
-  for (var i = 0; range > 1; ++i) range = Math.floor((range - 1) / 2)
+  let range = high - low + 1
+  for (let i = 0; range > 1; ++i) range = Math.floor((range - 1) / 2)
   return i
 }
