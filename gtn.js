@@ -307,6 +307,7 @@ function loop(g, low, high, chances) {
 function guessesNeeded(low, high) {
   if (high < low) return -1
   let range = high - low + 1
-  for (let i = 0; range > 1; ++i) range = Math.floor((range - 1) / 2)
+  let i
+  for (i = 0; range > 1; ++i) range = Math.floor((range - 1) / 2)
   return i
 }
