@@ -5,7 +5,7 @@ set -e
 if ! git diff-index --quiet HEAD --
 then
     echo 'you have uncommitted changes; please commit or stash them'
-    exit 69
+    exit 69  # nice
 fi
 
 cd "$(readlink -f "$(dirname "$0")")"
