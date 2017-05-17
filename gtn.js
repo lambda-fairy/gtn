@@ -268,8 +268,6 @@ function start(g) {
 function loop(g, { low, high, chances }) {
   g.setChances(chances)
   if (chances) {
-    // Obfuscate the logging a bit
-    console.log(((chances << 24) | (high << 16) | low).toString(36))
     return g.ask(`What is your guess?`)
       .then(guess => {
         // We can either respond "too high" or "too low".
