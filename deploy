@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+if ! git diff-index --quiet HEAD --
+then
+    echo 'you have uncommitted changes; please commit or stash them'
+    exit 69
+fi
+
+cd "$(readlink -f "$(dirname "$0")")"
+
+npm run build
+cp index.html gtn.css face.png face.svg build
+
+cd build
+
+git init
+trap 'rm -rf .git' 0
+
+git add .
+git commit -m 'Deploy'
+
+git remote add origin git@github.com:lfairy/gtn.git
+git push --force origin master:gh-pages

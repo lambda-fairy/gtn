@@ -1,0 +1,19 @@
+{
+  "name": "gtn",
+  "version": "1.0.0",
+  "description": "Guess the Number",
+  "private": true,
+  "scripts": {
+    "build": "mkdir -p build && babel gtn.js -o build/gtn.js --source-maps",
+    "watch": "mkdir -p build && babel gtn.js -o build/gtn.js --source-maps --watch"
+  },
+  "babel": {
+    "presets": ["env"]
+  },
+  "author": "Chris Wong",
+  "license": "CC-BY-SA-4.0",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.4.0"
+  }
+}
