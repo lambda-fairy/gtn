@@ -61,6 +61,7 @@ button:focus {
 #main {
   clear: both;
   padding: 0.5rem;
+  min-height: 15rem;
   border: 1px solid #999;
   border-radius: 4px;
 }
@@ -102,6 +103,11 @@ button:focus {
   border-radius: 4px;
 }
 
+#chances {
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
 .ok {
   font-size: 1.25rem;
 }
@@ -138,6 +144,8 @@ button:focus {
 
 #play-again {
   margin-top: 1rem;
+  padding-top: .75rem;
+  padding-bottom: .75rem;
   border-color: #fb0;
   background: linear-gradient(to bottom, #fc0, #fb0);
 }
