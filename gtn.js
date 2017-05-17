@@ -76,7 +76,7 @@ class Journal {
 
   _write(label, args, result) {
     // Write an entry to the journal
-    this.journal[this.index] = { label: label, args: args, result: result }
+    this.journal[this.index] = { label, args, result }
     ++this.index
     this.save()
   }
@@ -261,11 +261,11 @@ function intro(g) {
 
 
 function start(g) {
-  loop(g, 1, 100, 5)
+  loop(g, { low: 1, high: 100, chances: 5 })
 }
 
 
-function loop(g, low, high, chances) {
+function loop(g, { low, high, chances }) {
   g.setChances(chances)
   if (chances) {
     // Obfuscate the logging a bit
@@ -284,10 +284,18 @@ function loop(g, low, high, chances) {
         switch (g.random.choice(options)) {
           case 'toohigh':
             return g.say(`Too high!`)
-              .then(() => loop(g, low, Math.min(high, guess - 1), chances - 1))
+              .then(() => loop(g, {
+                low,
+                high: Math.min(high, guess - 1),
+                chances: chances - 1
+              }))
           case 'toolow':
             return g.say(`Too low!`)
-              .then(() => loop(g, Math.max(low, guess + 1), high, chances - 1))
+              .then(() => loop(g, {
+                low: Math.max(low, guess + 1),
+                high,
+                chances: chances - 1
+              }))
         }
       })
   } else {
