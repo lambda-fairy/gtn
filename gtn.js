@@ -92,15 +92,14 @@ class Journal {
     }
   }
 
-  promise(label, args, callback) {
+  async promise(label, args, callback) {
     let entry = this._read(label, args)
     if (entry) {
-      return Promise.resolve(entry.result)
+      return entry.result
     } else {
-      return new Promise(callback).then(result => {
-        this._write(label, args, result)
-        return result
-      })
+      let result = await new Promise(callback)
+      this._write(label, args, result)
+      return result
     }
   }
 }
@@ -253,55 +252,53 @@ window.addEventListener('load', () => {
 })
 
 
-function intro(g) {
-  return g.say(`Welcome to the Number Guessing Game!`)
-    .then(() => g.say(`I'm thinking of a number from 1 through 100.`))
-    .then(() => start(g))
+async function intro(g) {
+  await g.say(`Welcome to the Number Guessing Game!`)
+  await g.say(`I'm thinking of a number from 1 through 100.`)
+  await start(g)
 }
 
 
-function start(g) {
-  loop(g, { low: 1, high: 100, chances: 5 })
+async function start(g) {
+  await loop(g, { low: 1, high: 100, chances: 5 })
 }
 
 
-function loop(g, { low, high, chances }) {
+async function loop(g, { low, high, chances }) {
   g.setChances(chances)
   if (chances) {
-    return g.ask(`What is your guess?`)
-      .then(guess => {
-        // We can either respond "too high" or "too low".
-        // But we don't want to put ourselves in a tight spot.
-        // For example, if the user guesses 99 on their first turn, we don't
-        // want to say "too low"; because then they'll win on the next turn.
-        // So we first do some arithmetic to determine which of the two choices
-        // are safe.
-        let options = []
-        if (guessesNeeded(low, guess - 1) >= chances - 1) options.push('toohigh')
-        if (guessesNeeded(guess + 1, high) >= chances - 1) options.push('toolow')
-        switch (g.random.choice(options)) {
-          case 'toohigh':
-            return g.say(`Too high!`)
-              .then(() => loop(g, {
-                low,
-                high: Math.min(high, guess - 1),
-                chances: chances - 1
-              }))
-          case 'toolow':
-            return g.say(`Too low!`)
-              .then(() => loop(g, {
-                low: Math.max(low, guess + 1),
-                high,
-                chances: chances - 1
-              }))
-        }
-      })
+    let guess = await g.ask(`What is your guess?`)
+    // We can either respond "too high" or "too low".
+    // But we don't want to put ourselves in a tight spot.
+    // For example, if the user guesses 99 on their first turn, we don't
+    // want to say "too low"; because then they'll win on the next turn.
+    // So we first do some arithmetic to determine which of the two choices
+    // are safe.
+    let options = []
+    if (guessesNeeded(low, guess - 1) >= chances - 1) options.push('toohigh')
+    if (guessesNeeded(guess + 1, high) >= chances - 1) options.push('toolow')
+    switch (g.random.choice(options)) {
+      case 'toohigh':
+        await g.say(`Too high!`)
+        await loop(g, {
+          low,
+          high: Math.min(high, guess - 1),
+          chances: chances - 1
+        })
+      case 'toolow':
+        await g.say(`Too low!`)
+        await loop(g, {
+          low: Math.max(low, guess + 1),
+          high,
+          chances: chances - 1
+        })
+    }
   } else {
     g.recordLoss()
     let actual = g.random.randint(low, high)
-    return g.say(`The number was actually... ${actual}!`)
-      .then(() => g.gameOver(`Would you like to play again?`))
-      .then(() => start(g))
+    await g.say(`The number was actually... ${actual}!`)
+    await g.gameOver(`Would you like to play again?`)
+    await start(g)
   }
 }
 

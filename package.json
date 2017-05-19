@@ -8,12 +8,17 @@
     "watch": "mkdir -p build && babel gtn.js -o build/gtn.js --source-maps --watch"
   },
   "babel": {
-    "presets": ["env"]
+    "presets": [
+      "env"
+    ]
   },
   "author": "Chris Wong",
   "license": "CC-BY-SA-4.0",
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-preset-env": "^1.4.0"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.23.0"
   }
 }
