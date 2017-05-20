@@ -65,6 +65,11 @@ button:focus {
   border: 1px solid #999;
   border-radius: 4px;
 }
+@media (max-width: 500px) {
+  #main {
+    min-height: 26rem;
+  }
+}
 
 #main > * {
   margin: 0.5rem;
