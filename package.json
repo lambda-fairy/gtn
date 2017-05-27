@@ -4,8 +4,9 @@
   "description": "Guess the Number",
   "private": true,
   "scripts": {
-    "build": "mkdir -p build && babel gtn.js -o build/gtn.js --source-maps",
-    "watch": "mkdir -p build && babel gtn.js -o build/gtn.js --source-maps --watch"
+    "setup": "rm -fr build && mkdir -p build && cp node_modules/babel-polyfill/dist/polyfill.js build",
+    "build": "npm run setup && babel src -d build --copy-files --source-maps",
+    "watch": "npm run setup && babel src -d build --copy-files --source-maps --watch"
   },
   "babel": {
     "presets": [

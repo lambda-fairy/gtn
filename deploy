@@ -11,8 +11,6 @@ fi
 cd "$(readlink -f "$(dirname "$0")")"
 
 npm run build
-cp index.html gtn.css face.png face.svg build
-cp node_modules/babel-polyfill/dist/polyfill.js build
 
 cd build
 
