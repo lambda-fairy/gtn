@@ -1,0 +1,175 @@
+html, input, button {
+  font: 16px/1.5 Helvetica, Arial, sans-serif;
+}
+@media (min-width: 750px) and (min-height: 450px) {
+  html, input, button {
+    font-size: 24px;
+  }
+}
+@media (min-width: 1000px) and (min-height: 600px) {
+  html, input, button {
+    font-size: 32px;
+  }
+}
+
+html {
+  box-sizing: border-box;
+  min-height: 100%;
+}
+
+* {
+  box-sizing: inherit;
+}
+
+body {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+h1, footer {
+  margin: 0;
+  font-weight: normal;
+  line-height: 1;
+  color: #999;
+}
+
+h1 {
+  float: left;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+}
+
+output {
+  font-weight: bold;
+}
+
+#losses {
+  float: right;
+  margin: 0 1rem;
+}
+
+button::-moz-focus-inner {
+  /* Remove ugly dotted outlines on Gecko */
+  border: none;
+}
+button:focus {
+  /* Remove ugly blue outlines on WebKit */
+  outline: none;
+}
+
+#main {
+  clear: both;
+  padding: 0.5rem;
+  min-height: 15rem;
+  border: 1px solid #999;
+  border-radius: 4px;
+}
+@media (max-width: 500px) {
+  #main {
+    min-height: 26rem;
+  }
+}
+
+#main > * {
+  margin: 0.5rem;
+}
+
+#face {
+  float: left;
+  width: 12rem;
+  height: 12rem;
+}
+@media (max-width: 500px) {
+  #face {
+    float: none;
+    display: block;
+    margin: 0 auto;
+  }
+}
+
+#antiface {
+  float: right;
+  width: calc(100% - 14rem);
+}
+@media (max-width: 500px) {
+  #antiface {
+    float: none;
+    width: auto;
+  }
+}
+
+#antiface > * {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 1rem;
+  border: 3px solid transparent;
+  border-radius: 4px;
+}
+
+#chances {
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
+.ok {
+  font-size: 1.25rem;
+}
+
+#dialog {
+  position: relative;
+  border-color: #cef;
+  background: #eff;
+}
+@media (max-width: 500px) {
+  #dialog {
+    min-height: 0;
+  }
+}
+
+#dialog-ok {
+  float: right;
+}
+
+#input-form {
+  display: flex;
+}
+
+#input-text::-webkit-outer-spin-button,
+#input-text::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#input-text {
+  -moz-appearance: textfield;
+  min-width: 0;
+  flex: 1;
+}
+
+#play-again {
+  margin-top: 1rem;
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  border-color: #fb0;
+  background: linear-gradient(to bottom, #fc0, #fb0);
+}
+#play-again:active {
+  background: #fb0;
+}
+
+#dialog::after, #main::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+footer {
+  font-size: .75rem;
+  text-transform: lowercase;
+}
+
+footer a {
+  text-decoration: none;
+  color: #666;
+}
