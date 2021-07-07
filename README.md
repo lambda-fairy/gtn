@@ -1,9 +1,15 @@
 # Guess the Number
 
-This project is an implementation of a [number guessing game][1]. It is written in HTML5, and should work on all modern browsers.
+This project is an implementation of a [number guessing game][1].
+That's all it is.
 
-Unlike other guessing games though, this one doesn't let you win. No matter how many times you try, you will never guess the number. And to rub it in, the game keeps a permanent counter showing how many times you've lost. In fact, the code has no concept of a single "number" to be guessed; the whole exchange is a farce, designed to distract you from the realization that you've already lost, your life's work has no meaning, your parents don't really love you, you will die alone...
+It certainly doesn't use algorithmic trickery to funnel the player into an unwinnable state,
+teasing you with hopes of a triumph that never comes.
+No siree.
 
-But yeah go fork it on GitHub! Or something.
+<details>
+  <summary>ERROR</summary>
+  <img src="src/face.png" alt="THE FACE">
+</details>
 
 [1]: https://inventwithpython.com/chapter4.html
